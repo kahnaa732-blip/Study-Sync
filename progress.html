@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StudySync - Progress</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- Navbar -->
+<header class="dashboard-nav">
+
+    <div class="logo">📚 StudySync</div>
+
+    <nav>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="planner.html">Planner</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="notes.html">Notes</a>
+        <a href="timer.html">Focus Timer</a>
+        <a href="progress.html" class="active">Progress</a>
+
+        <button onclick="logout()" class="logout-btn">
+            Logout
+        </button>
+    </nav>
+
+</header>
+
+
+<main class="progress-page">
+
+    <div class="progress-heading">
+
+        <p>YOUR PERFORMANCE</p>
+
+        <h1>📊 Progress Tracker</h1>
+
+        <span>Track your study journey and stay motivated.</span>
+
+    </div>
+
+
+    <!-- Main Progress -->
+
+    <section class="progress-card">
+
+        <h2>Overall Task Progress</h2>
+
+        <div class="progress-circle">
+
+            <div class="progress-number" id="percentage">
+                0%
+            </div>
+
+        </div>
+
+        <h3 id="progressMessage">
+            Start completing your tasks!
+        </h3>
+
+    </section>
+
+
+    <!-- Statistics -->
+
+    <section class="progress-stats">
+
+        <div class="progress-stat-card">
+
+            <div class="stat-icon">📋</div>
+
+            <h3 id="totalTasks">0</h3>
+
+            <p>Total Tasks</p>
+
+        </div>
+
+
+        <div class="progress-stat-card">
+
+            <div class="stat-icon">✅</div>
+
+            <h3 id="completedTasks">0</h3>
+
+            <p>Completed Tasks</p>
+
+        </div>
+
+
+        <div class="progress-stat-card">
+
+            <div class="stat-icon">📝</div>
+
+            <h3 id="totalNotes">0</h3>
+
+            <p>Total Notes</p>
+
+        </div>
+
+
+        <div class="progress-stat-card">
+
+            <div class="stat-icon">⏱️</div>
+
+            <h3 id="studySessions">0</h3>
+
+            <p>Focus Sessions</p>
+
+        </div>
+
+    </section>
+
+
+    <!-- Subject Progress -->
+
+    <section class="subject-progress">
+
+        <h2>📚 Subject Progress</h2>
+
+        <p>Tasks completed in each subject.</p>
+
+
+        <div id="subjectList"></div>
+
+    </section>
+
+
+    <!-- Motivation -->
+
+    <section class="progress-motivation">
+
+        <h2>🌟 Keep Going!</h2>
+
+        <p id="motivationText">
+            Every small step takes you closer to your goal.
+        </p>
+
+        <a href="planner.html">
+            Continue Studying →
+        </a>
+
+    </section>
+
+</main>
+
+
+<script>
+
+// Login Check
+
+if(localStorage.getItem("studySyncLoggedIn") !== "true"){
+
+    window.location.href = "login.html";
+
+}
+
+
+// Get Data
+
+let tasks =
+    JSON.parse(localStorage.getItem("studyTasks")) || [];
+
+let notes =
+    JSON.parse(localStorage.getItem("studyNotes")) || [];
+
+let sessions =
+    parseInt(localStorage.getItem("studySessions")) || 0;
+
+
+// Calculate
+
+let totalTasks = tasks.length;
+
+let completedTasks =
+    tasks.filter(task => task.completed).length;
+
+let percentage =
+    totalTasks > 0
+    ? Math.round((completedTasks / totalTasks) * 100)
+    : 0;
+
+
+// Display Statistics
+
+document.getElementById("totalTasks").textContent =
+    totalTasks;
+
+document.getElementById("completedTasks").textContent =
+    completedTasks;
+
+document.getElementById("totalNotes").textContent =
+    notes.length;
+
+document.getElementById("studySessions").textContent =
+    sessions;
+
+document.getElementById("percentage").textContent =
+    percentage + "%";
+
+
+// Progress Message
+
+let message =
+    document.getElementById("progressMessage");
+
+if(percentage === 0){
+
+    message.textContent =
+        "Start completing your tasks! 🚀";
+
+}
+else if(percentage < 50){
+
+    message.textContent =
+        "Good start! Keep going! 💪";
+
+}
+else if(percentage < 80){
+
+    message.textContent =
+        "Great progress! You're doing amazing! 🌟";
+
+}
+else if(percentage < 100){
+
+    message.textContent =
+        "Almost there! Keep pushing! 🔥";
+
+}
+else{
+
+    message.textContent =
+        "Excellent! All tasks completed! 🎉";
+
+}
+
+
+// Subject Progress
+
+let subjects = [
+    "IoT",
+    "Web Technology",
+    "Java",
+    "Mobile Computing",
+    "Professional Skills"
+];
+
+let subjectList =
+    document.getElementById("subjectList");
+
+
+subjects.forEach(subject => {
+
+    let subjectTasks =
+        tasks.filter(task => task.subject === subject);
+
+    let total =
+        subjectTasks.length;
+
+    let completed =
+        subjectTasks.filter(
+            task => task.completed
+        ).length;
+
+    let percent =
+        total > 0
+        ? Math.round((completed / total) * 100)
+        : 0;
+
+
+    subjectList.innerHTML += `
+
+        <div class="subject-row">
+
+            <div class="subject-name">
+
+                <span>${subject}</span>
+
+                <span>
+                    ${completed}/${total}
+                </span>
+
+            </div>
+
+            <div class="subject-bar">
+
+                <div
+                    class="subject-fill"
+                    style="width:${percent}%">
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+});
+
+
+// Motivation
+
+let motivation =
+    document.getElementById("motivationText");
+
+if(percentage >= 80){
+
+    motivation.textContent =
+        "Amazing work! You are very close to completing your goals. 🏆";
+
+}
+else if(percentage >= 50){
+
+    motivation.textContent =
+        "You're halfway there! Stay consistent and keep studying. 💜";
+
+}
+else{
+
+    motivation.textContent =
+        "Don't worry about perfection. Just keep making progress every day. 🌱";
+
+}
+
+
+// Logout
+
+function logout(){
+
+    localStorage.removeItem("studySyncLoggedIn");
+
+    window.location.href = "login.html";
+
+}
+
+</script>
+
+</body>
+</html>

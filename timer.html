@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus Timer | StudySync</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="dashboard-nav">
+    <div class="logo">📚 StudySync</div>
+
+    <nav>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="planner.html">Planner</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="notes.html">Notes</a>
+        <a href="timer.html">Focus Timer</a>
+        <button onclick="logout()" class="logout-btn">Logout</button>
+    </nav>
+</header>
+
+<main class="timer-page">
+
+    <p class="small-title">FOCUS MODE</p>
+
+    <h1>⏱ Pomodoro Focus Timer</h1>
+
+    <p class="timer-subtitle">
+        Stay focused and study smarter.
+    </p>
+
+    <div class="timer-card">
+
+        <h2 id="mode">Study Time</h2>
+
+        <div class="circle">
+
+            <div class="time" id="timer">
+                25:00
+            </div>
+
+        </div>
+
+        <div class="timer-buttons">
+
+            <button onclick="startTimer()" class="start-btn">
+                ▶ Start
+            </button>
+
+            <button onclick="pauseTimer()" class="pause-btn">
+                ⏸ Pause
+            </button>
+
+            <button onclick="resetTimer()" class="reset-btn">
+                🔄 Reset
+            </button>
+
+        </div>
+
+        <div class="session">
+
+            <h3>Completed Sessions</h3>
+
+            <div id="sessionCount">
+                0
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<script>
+
+if(localStorage.getItem("studySyncLoggedIn") !== "true"){
+    window.location.href="login.html";
+}
+
+let studyTime = 25 * 60;
+let breakTime = 5 * 60;
+
+let timeLeft = studyTime;
+
+let timerInterval = null;
+
+let isStudy = true;
+
+let sessions =
+parseInt(localStorage.getItem("studySessions")) || 0;
+
+document.getElementById("sessionCount").textContent = sessions;
+
+
+function updateDisplay(){
+
+    let minutes = Math.floor(timeLeft/60);
+
+    let seconds = timeLeft % 60;
+
+    minutes = minutes < 10 ? "0"+minutes : minutes;
+
+    seconds = seconds < 10 ? "0"+seconds : seconds;
+
+    document.getElementById("timer").textContent =
+        minutes + ":" + seconds;
+}
+
+
+function startTimer(){
+
+    if(timerInterval !== null){
+        return;
+    }
+
+    timerInterval = setInterval(function(){
+
+        if(timeLeft > 0){
+
+            timeLeft--;
+
+            updateDisplay();
+
+        }
+        else{
+
+            clearInterval(timerInterval);
+
+            timerInterval = null;
+
+            if(isStudy){
+
+                sessions++;
+
+                localStorage.setItem("studySessions",sessions);
+
+                document.getElementById("sessionCount").textContent=sessions;
+
+                alert("Great Job! Study session completed 🎉");
+
+                isStudy=false;
+
+                timeLeft=breakTime;
+
+                document.getElementById("mode").textContent="Break Time";
+
+            }
+
+            else{
+
+                alert("Break finished! Let's study again 📚");
+
+                isStudy=true;
+
+                timeLeft=studyTime;
+
+                document.getElementById("mode").textContent="Study Time";
+
+            }
+
+            updateDisplay();
+
+        }
+
+    },1000);
+
+}
+
+
+function pauseTimer(){
+
+    clearInterval(timerInterval);
+
+    timerInterval=null;
+
+}
+
+
+function resetTimer(){
+
+    pauseTimer();
+
+    isStudy=true;
+
+    timeLeft=studyTime;
+
+    document.getElementById("mode").textContent="Study Time";
+
+    updateDisplay();
+
+}
+
+
+function logout(){
+
+    localStorage.removeItem("studySyncLoggedIn");
+
+    window.location.href="login.html";
+
+}
+
+updateDisplay();
+
+</script>
+
+</body>
+</html>

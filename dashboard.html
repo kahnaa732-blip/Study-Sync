@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | StudySync</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="dashboard-nav">
+
+    <div class="logo">
+        📚 StudySync
+    </div>
+
+    <nav>
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="planner.html">
+            Planner
+        </a>
+
+        <a href="schedule.html">
+            Schedule
+        </a>
+
+        <a href="notes.html">
+            Notes
+        </a>
+
+        <a href="timer.html">
+            Focus Timer
+        </a>
+
+        <button onclick="logout()" class="logout-btn">
+            Logout
+        </button>
+
+    </nav>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="dashboard">
+
+    <!-- Welcome -->
+
+    <section class="welcome">
+
+        <div>
+
+            <p class="small-title">
+                YOUR STUDY SPACE
+            </p>
+
+            <h1>
+                Hello, <span id="userName">
+                    Student
+                </span> 👋
+            </h1>
+
+            <p>
+                Ready to make today productive?
+            </p>
+
+        </div>
+
+        <div class="date-box">
+
+            📅
+
+            <span id="todayDate">
+                Date
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= STATS ================= -->
+
+    <section class="stats">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📝
+            </div>
+
+            <div>
+
+                <h2 id="totalTasks">
+                    0
+                </h2>
+
+                <p>Total Tasks</p>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                ✅
+            </div>
+
+            <div>
+
+                <h2 id="completedTasks">
+                    0
+                </h2>
+
+                <p>Completed</p>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                ⏱️
+            </div>
+
+            <div>
+
+                <h2>
+                    3h
+                </h2>
+
+                <p>Study Time</p>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🔥
+            </div>
+
+            <div>
+
+                <h2>
+                    7
+                </h2>
+
+                <p>Day Streak</p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= CONTENT ================= -->
+
+    <section class="dashboard-grid">
+
+
+        <!-- Progress -->
+
+        <div class="dashboard-card">
+
+            <div class="card-heading">
+
+                <h2>
+                    📈 Today's Progress
+                </h2>
+
+                <span id="percentage">
+                    0%
+                </span>
+
+            </div>
+
+
+            <div class="large-progress">
+
+                <div id="progressBar">
+                </div>
+
+            </div>
+
+
+            <p id="progressText">
+                Start completing your tasks!
+            </p>
+
+        </div>
+
+
+        <!-- Quick Actions -->
+
+        <div class="dashboard-card">
+
+            <h2>
+                ⚡ Quick Actions
+            </h2>
+
+
+            <div class="quick-actions">
+
+                <a href="planner.html">
+                    ➕ Add Task
+                </a>
+
+                <a href="schedule.html">
+                    📅 Study Schedule
+                </a>
+
+                <a href="notes.html">
+                    📝 Write Note
+                </a>
+
+                <a href="timer.html">
+                    ⏱️ Start Timer
+                <a href="progress.html">
+                    📊 Progress Tracker
+</a>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- ================= MOTIVATION ================= -->
+
+    <section class="motivation">
+
+        <div class="quote-icon">
+            ✨
+        </div>
+
+        <h2>
+            “Small progress every day
+            leads to big results.”
+        </h2>
+
+        <p>
+            Stay consistent. Your future self
+            will thank you.
+        </p>
+
+    </section>
+
+</main>
+
+
+<script>
+
+/* ================= LOGIN CHECK ================= */
+
+let loggedIn =
+    localStorage.getItem("studySyncLoggedIn");
+
+
+if (loggedIn !== "true") {
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* ================= USER NAME ================= */
+
+let savedUser =
+    localStorage.getItem("studySyncUser");
+
+
+if (savedUser) {
+
+    let user =
+        JSON.parse(savedUser);
+
+    document.getElementById("userName")
+        .textContent = user.name;
+
+}
+
+
+/* ================= DATE ================= */
+
+let date =
+    new Date();
+
+
+let options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+};
+
+
+document.getElementById("todayDate")
+    .textContent =
+    date.toLocaleDateString(
+        "en-IN",
+        options
+    );
+
+
+/* ================= TASK DATA ================= */
+
+let tasks =
+    JSON.parse(
+        localStorage.getItem("studyTasks")
+    ) || [];
+
+
+let total =
+    tasks.length;
+
+
+let completed =
+    tasks.filter(
+        task => task.completed
+    ).length;
+
+
+document.getElementById("totalTasks")
+    .textContent = total;
+
+
+document.getElementById("completedTasks")
+    .textContent = completed;
+
+
+/* ================= PROGRESS ================= */
+
+let percentage = 0;
+
+
+if (total > 0) {
+
+    percentage =
+        Math.round(
+            (completed / total) * 100
+        );
+
+}
+
+
+document.getElementById("percentage")
+    .textContent =
+    percentage + "%";
+
+
+document.getElementById("progressBar")
+    .style.width =
+    percentage + "%";
+
+
+if (total === 0) {
+
+    document.getElementById("progressText")
+        .textContent =
+        "No tasks yet. Add your first task!";
+
+}
+
+else {
+
+    document.getElementById("progressText")
+        .textContent =
+        completed +
+        " of " +
+        total +
+        " tasks completed.";
+
+}
+
+
+/* ================= LOGOUT ================= */
+
+function logout() {
+
+    localStorage.removeItem(
+        "studySyncLoggedIn"
+    );
+
+    window.location.href =
+        "login.html";
+
+}
+
+</script>
+
+</body>
+
+</html>

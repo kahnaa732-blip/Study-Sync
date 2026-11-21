@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudySync - Notes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="logo">StudySync</div>
+
+    <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="planner.html">Planner</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="notes.html" class="active">Notes</a>
+        <a href="timer.html">Focus Timer</a>
+        <a href="#" onclick="logout()">Logout</a>
+    </div>
+</nav>
+
+<!-- Notes Section -->
+<section class="notes-section">
+
+    <div class="notes-header">
+        <div>
+            <h1>📚 My Study Notes</h1>
+            <p>Save and organize your important study notes.</p>
+        </div>
+    </div>
+
+    <!-- Add Note -->
+    <div class="note-form">
+
+        <h2>➕ Add New Note</h2>
+
+        <input type="text" id="noteTitle" placeholder="Enter note title">
+
+        <select id="noteSubject">
+            <option value="">Select Subject</option>
+            <option value="IoT">IoT</option>
+            <option value="Web Technology">Web Technology</option>
+            <option value="Java">Java</option>
+            <option value="Mobile Computing">Mobile Computing</option>
+            <option value="Professional Skills">Professional Skills</option>
+        </select>
+
+        <textarea id="noteContent"
+            placeholder="Write your notes here..."></textarea>
+
+        <button onclick="addNote()">Save Note</button>
+
+    </div>
+
+    <!-- Search -->
+    <div class="note-search">
+        <input
+            type="text"
+            id="searchNote"
+            placeholder="🔍 Search notes..."
+            onkeyup="displayNotes()">
+
+        <select id="filterSubject" onchange="displayNotes()">
+            <option value="All">All Subjects</option>
+            <option value="IoT">IoT</option>
+            <option value="Web Technology">Web Technology</option>
+            <option value="Java">Java</option>
+            <option value="Mobile Computing">Mobile Computing</option>
+            <option value="Professional Skills">Professional Skills</option>
+        </select>
+    </div>
+
+    <!-- Notes List -->
+    <div id="notesContainer" class="notes-container"></div>
+
+</section>
+
+<script>
+
+// Login Check
+if (localStorage.getItem("studySyncLoggedIn") !== "true") {
+    window.location.href = "login.html";
+}
+
+// Get notes
+let notes = JSON.parse(localStorage.getItem("studyNotes")) || [];
+
+
+// Add Note
+function addNote() {
+
+    let title = document.getElementById("noteTitle").value.trim();
+    let subject = document.getElementById("noteSubject").value;
+    let content = document.getElementById("noteContent").value.trim();
+
+    if (title === "" || subject === "" || content === "") {
+        alert("Please fill all fields!");
+        return;
+    }
+
+    let note = {
+        id: Date.now(),
+        title: title,
+        subject: subject,
+        content: content,
+        createdAt: new Date().toLocaleDateString()
+    };
+
+    notes.push(note);
+
+    localStorage.setItem("studyNotes", JSON.stringify(notes));
+
+    document.getElementById("noteTitle").value = "";
+    document.getElementById("noteSubject").value = "";
+    document.getElementById("noteContent").value = "";
+
+    displayNotes();
+
+    alert("Note saved successfully! ✅");
+}
+
+
+// Display Notes
+function displayNotes() {
+
+    let container = document.getElementById("notesContainer");
+
+    let search = document
+        .getElementById("searchNote")
+        .value
+        .toLowerCase();
+
+    let filter = document.getElementById("filterSubject").value;
+
+    container.innerHTML = "";
+
+    let filteredNotes = notes.filter(note => {
+
+        let matchesSearch =
+            note.title.toLowerCase().includes(search) ||
+            note.content.toLowerCase().includes(search);
+
+        let matchesSubject =
+            filter === "All" || note.subject === filter;
+
+        return matchesSearch && matchesSubject;
+    });
+
+
+    if (filteredNotes.length === 0) {
+
+        container.innerHTML = `
+            <div class="no-notes">
+                <h3>📝 No Notes Found</h3>
+                <p>Add your first study note above.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    filteredNotes.forEach(note => {
+
+        let card = document.createElement("div");
+
+        card.className = "note-card";
+
+        card.innerHTML = `
+            <div class="note-card-header">
+                <h3>${escapeHTML(note.title)}</h3>
+                <span>${escapeHTML(note.subject)}</span>
+            </div>
+
+            <p class="note-content">
+                ${escapeHTML(note.content).replace(/\n/g, "<br>")}
+            </p>
+
+            <small>Created: ${note.createdAt}</small>
+
+            <div class="note-buttons">
+                <button onclick="editNote(${note.id})">
+                    ✏️ Edit
+                </button>
+
+                <button onclick="deleteNote(${note.id})">
+                    🗑️ Delete
+                </button>
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+
+// Edit Note
+function editNote(id) {
+
+    let note = notes.find(n => n.id === id);
+
+    if (!note) return;
+
+    let newTitle = prompt("Enter new title:", note.title);
+
+    if (newTitle === null) return;
+
+    let newContent = prompt("Edit your note:", note.content);
+
+    if (newContent === null) return;
+
+    newTitle = newTitle.trim();
+    newContent = newContent.trim();
+
+    if (newTitle === "" || newContent === "") {
+        alert("Title and content cannot be empty!");
+        return;
+    }
+
+    note.title = newTitle;
+    note.content = newContent;
+
+    localStorage.setItem("studyNotes", JSON.stringify(notes));
+
+    displayNotes();
+
+    alert("Note updated successfully! ✅");
+}
+
+
+// Delete Note
+function deleteNote(id) {
+
+    let confirmDelete = confirm(
+        "Are you sure you want to delete this note?"
+    );
+
+    if (!confirmDelete) return;
+
+    notes = notes.filter(note => note.id !== id);
+
+    localStorage.setItem("studyNotes", JSON.stringify(notes));
+
+    displayNotes();
+}
+
+
+// Logout
+function logout() {
+
+    localStorage.removeItem("studySyncLoggedIn");
+
+    window.location.href = "login.html";
+}
+
+
+// Security helper
+function escapeHTML(text) {
+
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+// Show notes when page loads
+displayNotes();
+
+</script>
+
+</body>
+</html>

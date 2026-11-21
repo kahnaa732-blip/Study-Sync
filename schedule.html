@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Study Timetable | StudySync</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="dashboard-nav">
+
+    <div class="logo">
+        📚 StudySync
+    </div>
+
+    <nav>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="planner.html">Planner</a>
+        <a href="schedule.html">Timetable</a>
+        <a href="notes.html">Notes</a>
+        <a href="timer.html">Focus Timer</a>
+
+        <button onclick="logout()" class="logout-btn">
+            Logout
+        </button>
+    </nav>
+
+</header>
+
+
+<main class="schedule-page">
+
+    <p class="small-title">
+        WEEKLY STUDY PLAN
+    </p>
+
+    <h1>📅 My Study Timetable</h1>
+
+    <p class="page-description">
+        Plan your week and stay consistent with your studies.
+    </p>
+
+
+    <!-- SUBJECTS -->
+
+    <div class="subject-list">
+
+        <span>🌐 IoT</span>
+        <span>💻 Web Technology</span>
+        <span>☕ Java</span>
+        <span>📱 Mobile Computing</span>
+        <span>🧑‍💼 Professional Skills</span>
+
+    </div>
+
+
+    <!-- TIMETABLE -->
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Time</th>
+
+                    <th>Monday</th>
+
+                    <th>Tuesday</th>
+
+                    <th>Wednesday</th>
+
+                    <th>Thursday</th>
+
+                    <th>Friday</th>
+
+                    <th>Saturday</th>
+
+                </tr>
+
+            </thead>
+
+<tbody>
+
+    <!-- Morning -->
+
+    <tr>
+        <td>8:00 - 9:00 AM</td>
+        <td class="iot">IoT</td>
+        <td class="java">Java</td>
+        <td class="web">Web Technology</td>
+        <td class="mobile">Mobile Computing</td>
+        <td class="iot">IoT</td>
+        <td class="professional">Professional Skills</td>
+    </tr>
+
+    <tr>
+        <td>9:00 - 10:00 AM</td>
+        <td class="web">Web Technology</td>
+        <td class="mobile">Mobile Computing</td>
+        <td class="java">Java</td>
+        <td class="iot">IoT</td>
+        <td class="professional">Professional Skills</td>
+        <td class="web">Web Technology</td>
+    </tr>
+
+    <tr>
+        <td>10:00 - 10:30 AM</td>
+        <td class="break" colspan="6">
+            ☕ BREAK
+        </td>
+    </tr>
+
+    <tr>
+        <td>10:30 - 11:30 AM</td>
+        <td class="java">Java</td>
+        <td class="web">Web Technology</td>
+        <td class="mobile">Mobile Computing</td>
+        <td class="professional">Professional Skills</td>
+        <td class="java">Java</td>
+        <td class="iot">IoT</td>
+    </tr>
+
+    <tr>
+        <td>11:30 AM - 12:30 PM</td>
+        <td class="mobile">Mobile Computing</td>
+        <td class="iot">IoT</td>
+        <td class="professional">Professional Skills</td>
+        <td class="web">Web Technology</td>
+        <td class="mobile">Mobile Computing</td>
+        <td class="java">Java</td>
+    </tr>
+
+    <tr>
+        <td>12:30 - 1:30 PM</td>
+        <td class="lunch" colspan="6">
+            🍱 LUNCH BREAK
+        </td>
+    </tr>
+
+    <tr>
+        <td>1:30 - 2:30 PM</td>
+        <td class="professional">Professional Skills</td>
+        <td class="java">Java</td>
+        <td class="iot">IoT</td>
+        <td class="mobile">Mobile Computing</td>
+        <td class="web">Web Technology</td>
+        <td class="professional">Professional Skills</td>
+    </tr>
+
+    <tr>
+        <td>2:30 - 3:30 PM</td>
+        <td class="web">Web Technology</td>
+        <td class="professional">Professional Skills</td>
+        <td class="java">Java</td>
+        <td class="iot">IoT</td>
+        <td class="mobile">Mobile Computing</td>
+        <td class="web">Web Technology</td>
+    </tr>
+
+
+    <!-- Evening Break -->
+
+    <tr>
+        <td>3:30 - 4:00 PM</td>
+
+        <td class="break" colspan="6">
+            ☕ EVENING BREAK
+        </td>
+    </tr>
+
+
+    <!-- Evening Study -->
+
+    <tr>
+        <td>4:00 - 5:00 PM</td>
+
+        <td class="java">Java</td>
+        <td class="iot">IoT</td>
+        <td class="web">Web Technology</td>
+        <td class="mobile">Mobile Computing</td>
+        <td class="professional">Professional Skills</td>
+        <td class="java">Java</td>
+    </tr>
+
+
+    <tr>
+        <td>5:00 - 6:00 PM</td>
+
+        <td class="iot">IoT</td>
+        <td class="web">Web Technology</td>
+        <td class="mobile">Mobile Computing</td>
+        <td class="java">Java</td>
+        <td class="iot">IoT</td>
+        <td class="professional">Professional Skills</td>
+    </tr>
+
+
+    <tr>
+        <td>6:00 - 7:00 PM</td>
+
+        <td class="mobile">Mobile Computing</td>
+        <td class="professional">Professional Skills</td>
+        <td class="java">Java</td>
+        <td class="iot">IoT</td>
+        <td class="web">Web Technology</td>
+        <td class="mobile">Mobile Computing</td>
+    </tr>
+
+
+    <tr>
+        <td>7:00 - 7:30 PM</td>
+
+        <td class="break" colspan="6">
+            🍽️ DINNER BREAK
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>7:30 - 8:30 PM</td>
+
+        <td class="web">Web Technology</td>
+        <td class="java">Java</td>
+        <td class="iot">IoT</td>
+        <td class="professional">Professional Skills</td>
+        <td class="mobile">Mobile Computing</td>
+        <td class="web">Web Technology</td>
+    </tr>
+
+
+    <tr>
+        <td>8:30 - 9:30 PM</td>
+
+        <td class="professional">Professional Skills</td>
+        <td class="mobile">Mobile Computing</td>
+        <td class="web">Web Technology</td>
+        <td class="java">Java</td>
+        <td class="professional">Professional Skills</td>
+        <td class="iot">IoT</td>
+    </tr>
+
+</tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- TODAY -->
+
+    <div class="today-study">
+
+        <h2>🎯 Today's Focus</h2>
+
+        <p id="todaySubject">
+            Loading today's subjects...
+        </p>
+
+    </div>
+
+</main>
+
+
+<script>
+
+/* ================= LOGIN CHECK ================= */
+
+if (
+    localStorage.getItem("studySyncLoggedIn")
+    !== "true"
+) {
+    window.location.href = "login.html";
+}
+
+
+/* ================= TODAY ================= */
+
+let day =
+    new Date().getDay();
+
+
+let days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+];
+
+
+let today =
+    days[day];
+
+
+let subjects = {
+
+    Monday:
+        "IoT • Web Technology • Java • Mobile Computing • Professional Skills",
+
+    Tuesday:
+        "Java • Mobile Computing • Web Technology • IoT • Professional Skills",
+
+    Wednesday:
+        "Web Technology • Java • Mobile Computing • IoT • Professional Skills",
+
+    Thursday:
+        "Mobile Computing • IoT • Professional Skills • Web Technology",
+
+    Friday:
+        "IoT • Professional Skills • Java • Mobile Computing • Web Technology",
+
+    Saturday:
+        "Professional Skills • Web Technology • IoT • Java",
+
+    Sunday:
+        "Rest Day 🌸 — Revise your weekly topics!"
+
+};
+
+
+document.getElementById("todaySubject")
+    .textContent =
+    today + ": " + subjects[today];
+
+
+/* ================= LOGOUT ================= */
+
+function logout() {
+
+    localStorage.removeItem(
+        "studySyncLoggedIn"
+    );
+
+    window.location.href =
+        "login.html";
+
+}
+
+</script>
+
+</body>
+</html>
